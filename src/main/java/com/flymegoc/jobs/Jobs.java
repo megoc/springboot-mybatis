@@ -122,10 +122,9 @@ public class Jobs {
                 sprCategories.setSprCategotyCreateTime(new Date());
                 sprCategories.setSprCategoryUpdateTime(new Date());
                 categoryService.insert(sprCategories);
-
-                logger.info("初始化类别完成");
-                return;
             }
+            logger.info("初始化类别完成");
+            return;
         }
         //随机
         int index = mRandom.nextInt(sprCategoriesList.size());
