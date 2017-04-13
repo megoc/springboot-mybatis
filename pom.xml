@@ -64,7 +64,7 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <!-- Mybatis generator. -->
+        <!-- Mybatis generator.
         <dependency>
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator</artifactId>
@@ -76,7 +76,7 @@
             <artifactId>mybatis-generator-maven-plugin</artifactId>
             <version>1.3.5</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency> -->
         <!-- 网络请求okhttp、okio、retrofit -->
         <dependency>
             <groupId>com.squareup.okio</groupId>
