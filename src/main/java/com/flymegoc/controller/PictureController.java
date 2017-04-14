@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class PictureController {
     @RequestMapping(value = "api/queryPicture/categoryId/{categoryId}/page/{page}",method = RequestMethod.GET)
     public BaseResult<List<SprPicture>> queryPicture(@PathVariable("categoryId") int categoryId, @PathVariable("page") int page){
         SprPictureExample pictureExample=new SprPictureExample();
+        List<String> imgageTypes=new ArrayList<>();
+        imgageTypes.add("image/jpeg");
+        imgageTypes.add("image/png");
+        pictureExample.or().andSprPictureTypeIn(imgageTypes);
         pictureExample.or().andSprPictureCategoryidEqualTo(categoryId);
         PageHelper.startPage(page,10);
         List<SprPicture> sprPictureList=pictureService.selectByExample(pictureExample);
