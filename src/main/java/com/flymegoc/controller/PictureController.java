@@ -31,6 +31,7 @@ public class PictureController {
         imgageTypes.add("image/png");
         pictureExample.or().andSprPictureTypeIn(imgageTypes);
         pictureExample.or().andSprPictureCategoryidEqualTo(categoryId);
+        pictureExample.or().andSprPictureCategoryidEqualTo(categoryId);
         PageHelper.startPage(page,10);
         List<SprPicture> sprPictureList=pictureService.selectByExample(pictureExample);
 
