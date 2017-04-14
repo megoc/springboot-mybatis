@@ -56,6 +56,7 @@ public class HuaBanUtils {
                         });
                         Date date=new Date();
                         for (HuaBanRoot huaBanRoot : huaBanRootList) {
+
                             SprPicture picture=new SprPicture();
                             picture.setSprPictureBoardid(huaBanRoot.getBoard_id()+"");
                             picture.setSprPicturePinid(huaBanRoot.getPin_id()+"");
@@ -64,6 +65,9 @@ public class HuaBanUtils {
                             picture.setSprPictureId((float) fileBean.getId());
                             picture.setSprPictureBucket(fileBean.getBucket());
                             picture.setSprPictureKey(fileBean.getKey());
+                            if(!fileBean.getType().equals("image/jpeg")&&!fileBean.getType().equals("image/png")){
+                                continue;
+                            }
                             picture.setSprPictureType(fileBean.getType());
                             picture.setSprPictureWidth(fileBean.getWidth());
                             picture.setSprPictureHeight(fileBean.getHeight());
@@ -128,6 +132,9 @@ public class HuaBanUtils {
                             picture.setSprPictureId((float) fileBean.getId());
                             picture.setSprPictureBucket(fileBean.getBucket());
                             picture.setSprPictureKey(fileBean.getKey());
+                            if(!fileBean.getType().equals("image/jpeg")&&!fileBean.getType().equals("image/png")){
+                                continue;
+                            }
                             picture.setSprPictureType(fileBean.getType());
                             picture.setSprPictureWidth(fileBean.getWidth());
                             picture.setSprPictureHeight(fileBean.getHeight());
@@ -185,6 +192,9 @@ public class HuaBanUtils {
                             picture.setSprPictureId((float) fileBean.getId());
                             picture.setSprPictureBucket(fileBean.getBucket());
                             picture.setSprPictureKey(fileBean.getKey());
+                            if(!fileBean.getType().equals("image/jpeg")&&!fileBean.getType().equals("image/png")){
+                                continue;
+                            }
                             picture.setSprPictureType(fileBean.getType());
                             picture.setSprPictureWidth(fileBean.getWidth());
                             picture.setSprPictureHeight(fileBean.getHeight());
