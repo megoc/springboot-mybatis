@@ -1,5 +1,7 @@
 package com.flymegoc.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class SprPicture {
@@ -26,9 +28,9 @@ public class SprPicture {
     private Integer sprPictureLikes;
 
     private Integer sprPictureCategoryid;
-
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sprPictureCreateTime;
-
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sprPictureUpdateTime;
 
     public Float getSprPictureId() {
