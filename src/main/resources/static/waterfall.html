@@ -52,7 +52,6 @@
         </el-submenu>
         <el-menu-item index="3"><a href="#" target="_blank">订单管理</a></el-menu-item>
     </el-menu>
-    <img src="http://cdb.nos-eastchina1.126.net/MH9T3SS929CU.jpg">
     <el-carousel :interval="4000" type="card" height="350px">
         <el-carousel-item v-for="item in pictures.slice(0,6)">
             <img :src="getImgUrl(item.sprPictureKey)" height="100%"/>
@@ -96,7 +95,7 @@
         el: "#app",
         mounted: function () {
             this.$nextTick(function () {
-
+                console.log("什么鬼"+document.referrer);
                 this.loadData(this.currentCategoryId, this.currentPage);
             })
         },
