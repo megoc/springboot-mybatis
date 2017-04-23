@@ -10,12 +10,17 @@ import com.flymegoc.model.huaban.board.BoardRoot;
 import com.flymegoc.model.huaban.pins.PinsRoot;
 import com.flymegoc.service.HuaBanService;
 import com.flymegoc.service.PictureService;
+import com.netease.cloud.auth.BasicCredentials;
+import com.netease.cloud.auth.Credentials;
+import com.netease.cloud.services.nos.NosClient;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.Url;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
