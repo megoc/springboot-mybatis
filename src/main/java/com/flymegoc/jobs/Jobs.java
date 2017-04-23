@@ -68,7 +68,7 @@ public class Jobs {
 
     private static Logger logger = LoggerFactory.getLogger(Jobs.class);
 
-    public final static long ONE_Minute = 60 * 1000*10;
+    public final static long ONE_Minute = 60 * 1000*30;
 
     private final static String BASE_URL = "http://huaban.com/";
 

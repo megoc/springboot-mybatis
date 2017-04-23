@@ -20,33 +20,36 @@ public class PictureController {
     @Autowired
     private PictureService pictureService;
 
-    @RequestMapping(value = "api/queryPicture/categoryId/{categoryId}/page/{page}",method = RequestMethod.GET)
-    public BaseResult<List<SprPicture>> queryPictureByPathVariable(@PathVariable("categoryId") int categoryId, @PathVariable("page") int page){
-        return queryPicture(categoryId,page);
+    @RequestMapping(value = "api/queryPicture/categoryId/{categoryId}/page/{page}", method = RequestMethod.GET)
+    public BaseResult<List<SprPicture>> queryPictureByPathVariable(@PathVariable("categoryId") int categoryId, @PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
+        return queryPicture(categoryId, page, pageSize);
     }
 
-    @RequestMapping(value = "api/queryPicture/",method = RequestMethod.GET)
-    public BaseResult<List<SprPicture>> queryPictureByRequestParam(@RequestParam("categoryId") int categoryId, @RequestParam("page") int page){
+    @RequestMapping(value = "api/queryPicture/", method = RequestMethod.GET)
+    public BaseResult<List<SprPicture>> queryPictureByRequestParam(@RequestParam("categoryId") int categoryId, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
 
-        return queryPicture(categoryId,page);
+        return queryPicture(categoryId, page, pageSize);
     }
 
 
-    public BaseResult<List<SprPicture>> queryPicture(int categoryId,int page){
-        SprPictureExample pictureExample=new SprPictureExample();
-        List<String> imgageTypes=new ArrayList<>();
+    public BaseResult<List<SprPicture>> queryPicture(int categoryId, int page, int pageSize) {
+        SprPictureExample pictureExample = new SprPictureExample();
+        List<String> imgageTypes = new ArrayList<>();
         imgageTypes.add("image/jpeg");
         imgageTypes.add("image/png");
         pictureExample.or().andSprPictureTypeIn(imgageTypes).andSprPictureCategoryidEqualTo(categoryId).andSprPictureHeightLessThan(8000);
         pictureExample.setOrderByClause("spr_picture_create_time desc");
         // pictureExample.or().andSprPictureCategoryidEqualTo(categoryId);
-        PageHelper.startPage(page,10);
-        List<SprPicture> sprPictureList=pictureService.selectByExample(pictureExample);
+        if (pageSize <= 0) {
+            pageSize = 10;
+        }
+        PageHelper.startPage(page, pageSize);
+        List<SprPicture> sprPictureList = pictureService.selectByExample(pictureExample);
 
-        BaseResult<List<SprPicture>> baseResult=new BaseResult<>();
-        baseResult.data=sprPictureList;
-        baseResult.code=0;
-        baseResult.message="success";
+        BaseResult<List<SprPicture>> baseResult = new BaseResult<>();
+        baseResult.data = sprPictureList;
+        baseResult.code = 0;
+        baseResult.message = "success";
 
         return baseResult;
     }

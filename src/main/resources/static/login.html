@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <script src="assets/js/vue.js"></script>
+    <script src="assets/js/axios.js"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <style>
+        .box-card {
+            width: 350px;
+            padding: 50px;
+        }
+
+        .input {
+            width: auto;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .div1 {
+
+            width: 450px;
+            height: 300px;
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            /*50%为自身尺寸的一半*/
+        }
+
+        body {
+            background: #d3dce6;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+
+</head>
+<body>
+<div id="app">
+    <div class="div1">
+        <el-card class="box-card">
+            <el-input class="input" v-model="input_username" placeholder="">
+                <template slot="prepend">账号：</template>
+            </el-input>
+            <el-input class="input" v-model="input_password" type="password" placeholder="">
+                <template slot="prepend">密码：</template>
+            </el-input>
+            <el-row type="flex" class="row-bg" justify="space-between">
+                <el-col :span="6">
+                    <div class="grid-content bg-purple">
+                        <el-checkbox v-model="checked">记住密码</el-checkbox>
+                    </div>
+                </el-col>
+
+                <el-col :span="12">
+                    <div class="grid-content bg-purple">
+
+                        <span>忘记密码？</span><a href="/">立即注册</a>
+                    </div>
+                </el-col>
+            </el-row>
+
+
+            <el-button type="primary" class="btn" @click="login">登录</el-button>
+        </el-card>
+    </div>
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        mounted: function () {
+            this.$nextTick(function () {
+                // 代码保证 this.$el 在 document 中
+
+            })
+        },
+        data: {
+            checked: false,
+            input_username: '',
+            input_password: '',
+        },
+        methods: {
+            login: function () {
+                if (this.input_username !== '' & this.input_password !== '') {
+                    var _this = this;
+                    axios({
+                        method: 'get',
+                        url: '/user/login/',
+                        params: {
+                            username: _this.input_username,
+                            password: _this.input_password
+                        }
+                    }).then(function (res) {
+                        _this.$message({
+                            message: '登录成功！',
+                            type: 'success'
+                        });
+                        window.location.href="/index.html";
+                        console.log(res);
+                    }).catch(function (error) {
+                        console.log(error);
+                        _this.$message({
+                            message: '登录失败，密码或用户名错误！',
+                            type: 'error'
+                        });
+                    })
+                } else if (this.input_username == '') {
+                    this.$message({
+                        message: '账号不能为空！',
+                        type: 'warning'
+                    });
+                } else if (this.input_password == '') {
+                    this.$message({
+                        message: '密码不能为空！',
+                        type: 'warning'
+                    });
+                }
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -52,5 +52,8 @@
         <table tableName="spr_fav_categories" ></table>
         <table tableName="spr_categories" ></table>
         <table tableName="spr_appinfo" ></table>
+        <table tableName="spr_role" ></table>
+        <table tableName="spr_user_role" ></table>
+        <table tableName="spr_permission" ></table>
     </context>
 </generatorConfiguration>

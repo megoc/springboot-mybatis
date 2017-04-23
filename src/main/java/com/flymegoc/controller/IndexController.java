@@ -31,6 +31,6 @@ public class IndexController {
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public String indexPage(Model model){
 
-        return "forward:/index.html";
+        return "forward:/waterfall.html";
     }
 }

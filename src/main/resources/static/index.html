@@ -3,23 +3,14 @@
 <head>
     <title>后台管理</title>
     <meta charset="UTF-8">
-    <script src="js/vue.js"></script>
-    <script src="js/axios.js"></script>
-
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
-    <!-- 引入组件库 -->
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-    <style>
-        .ppp {
-            margin: 0px;
-        }
-    </style>
 </head>
 <body>
 <div id="app">
     <div class="headerWrapper">
-        <header class="header" style="background-color: rgb(32, 160, 255);">
+        <header class="header">
+
             <el-menu theme="dark" :default-active="activeIndex" class="el-menu-demo" mode="horizontal"
                      @select="handleSelect">
                 <el-menu-item index="1">处理中心</el-menu-item>
@@ -31,6 +22,7 @@
                 </el-submenu>
                 <el-menu-item index="3">订单管理</el-menu-item>
             </el-menu>
+
         </header>
     </div>
 
@@ -63,9 +55,9 @@
             </el-col>
             <el-col :span="20">
                 <div style="margin-bottom: 10px">
-                    <el-select v-model="value" size="small" @change="selectChange" placeholder="请选择">
+                    <el-select v-model="sprCategoryId" size="small" @change="selectChange" placeholder="请选择">
                         <el-option
-                                v-for="category in categories.cass"
+                                v-for="category in categories"
                                 :label="category.sprCategoryName"
                                 :value="category.sprCategoryId">
                         </el-option>
@@ -73,11 +65,36 @@
                 </div>
 
                 <el-tabs type="border-card">
+                    <el-tab-pane label="配置管理">
+                        <div ref='aa'>
+                            <waterfall :line="h" :line-gap="20" :grow="grow" :min-line-gap="20" ref="waterfall">
+                                <!-- each component is wrapped by a waterfall slot -->
+                                <waterfall-slot
+                                        v-for="(item, index) in pictures"
+                                        :width="item.sprPictureWidth"
+                                        :height="item.sprPictureHeight"
+                                        :order="index"
+                                        :key="item.sprPictureId"
+                                        :style="{ padding: '5px'}"
+                                >
+                                    <!--
+                                      your component
+                                    -->
+                                    <el-card class="box-card" :body-style="{ padding: '0px'}">
+                                        <img :src="getImgUrl(item.sprPictureKey)" width="100%" height="100%"/>
+                                    </el-card>
+                                </waterfall-slot>
+                            </waterfall>
+                        </div>
+
+                    </el-tab-pane>
                     <el-tab-pane label="用户管理">
                         <div class="grid-content bg-purple-light">
                             <template>
                                 <el-table
                                         :data="pictures"
+                                        v-loading.body="loading"
+                                        element-loading-text="拼命加载中"
                                         border
                                         style="width: 100%">
                                     <el-table-column
@@ -134,12 +151,12 @@
                                     </el-table-column>
                                 </el-table>
                             </template>
-                            <el-dialog title="提示" v-model="dialogVisible" size="full">
-                                <img :src="imgSrc"/>
+                            <el-dialog title="提示" v-model="dialogVisible" size="samll">
+                                <img :src="imgSrc" width="auto"/>
                             </el-dialog>
-                            <el-row :gutter="20">
-                                <el-col :span="12" :offset="6">
-                                    <div class="grid-content bg-purple">
+                            <el-row type="flex" class="row-bg" justify="center">
+                                <el-col :span="6">
+                                    <div class="grid-content bg-purple" style="margin-top: 15px">
                                         <el-pagination
                                                 @size-change="handleSizeChange"
                                                 @current-change="handleCurrentChange"
@@ -153,7 +170,6 @@
                             </el-row>
                         </div>
                     </el-tab-pane>
-                    <el-tab-pane label="配置管理">配置管理</el-tab-pane>
                     <el-tab-pane label="角色管理">角色管理</el-tab-pane>
                     <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
                 </el-tabs>
@@ -163,15 +179,32 @@
         </el-row>
     </div>
 </div>
+<script src="assets/js/vue.js"></script>
+<script src="assets/js/vue-waterfall.min.js"></script>
+<script src="assets/js/axios.js"></script>
 
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
-    new Vue({
+    var app = new Vue({
         el: "#app",
         mounted: function () {
             this.$nextTick(function () {
                 // 代码保证 this.$el 在 document 中
+
+                this.screenWidth = Math.ceil(this.$refs.aa.offsetWidth / 5);
+                console.log("div的宽度：" + this.screenWidth)
+
                 this.loadCategory();
                 this.loadData(this.currentCategoryId, this.currentPage);
+                window.addEventListener("resize", function () {
+                    setTimeout(function () {
+
+                        app.screenWidth = Math.ceil(app.$refs.aa.offsetWidth / 5);
+                        console.log("窗口发生改变了：" + app.screenWidth);
+                    }, 400);
+
+                })
             })
         },
         data: {
@@ -181,34 +214,50 @@
             defaultOpenMenu: [1, 2],
             dialogVisible: false,
             imgSrc: 'img/splash.jpg',
-            categories: {
-                cass: [], value: ''
-            }
+            categories: [],
+            sprCategoryId: 1,
+            loading: true,
+            grow: [1, 1, 1, 1, 1],
+            isBusy: false,
+            screenWidth: 0,
+            aa: ''
+        },
+        components: {
+            'waterfall': Waterfall.waterfall,
+            'waterfall-slot': Waterfall.waterfallSlot
         }
         ,
         methods: {
+            //加载图片数据
             loadData: function (categoryId, page) {
                 var _this = this;
+                _this.loading = true;
                 axios({
                     method: 'get',
                     url: 'api/queryPicture/',
                     params: {
                         categoryId: categoryId,
-                        page: page
+                        page: page,
+                        pageSize: 20
                     }
                 }).then(function (res) {
+
                     _this.pictures = res.data.data;
+
+                    _this.loading = false;
                     console.log(res.data.data[0].sprPictureId);
                 })
                     .catch(function (error) {
                         console.log(error);
+                        _this.loading = false;
                     })
             },
+            //加载类别数据
             loadCategory: function () {
                 var _this = this;
                 axios.get('api/findCategory')
                     .then(function (responed) {
-                        _this.categories.cass = responed.data.data;
+                        _this.categories = responed.data.data;
                     }).catch(function () {
 
                 })
@@ -218,9 +267,9 @@
                 console.log('每页 ' + val + ' 条');
             },
             handleCurrentChange: function (val) {
-                this.currentPage = val;
-                console.log('当前页: ' + val);
-                this.loadData(this.currentCategoryId, this.currentPage);
+//                this.currentPage = val;
+//                console.log('当前页: ' + val);
+//                this.loadData(this.currentCategoryId, this.currentPage);
             },
             showPicture: function (index, item) {
                 this.dialogVisible = true;
@@ -228,11 +277,55 @@
                 console.log(index)
             },
             selectChange: function (item) {
+                this.currentPage = 1;
+                this.currentCategoryId = item;
+                this.loadData(this.currentCategoryId, this.currentPage);
                 console.log(item)
-            }
+            },
+            //获取图片链接
+            getImgUrl: function (key) {
+                return 'http://img.hb.aicdn.com/' + key + "_/fw/" + this.screenWidth;
+            },
+            //计算图片的高度
+            getImgHeight: function (o_width, o_height) {
+                return this.screenWidth * o_height / o_width;
+            },
+            //加载更多数据
+            loadmoreData: function () {
+                var page = ++this.currentPage;
+                var categoryId = this.currentCategoryId;
+                console.log("加载更多：" + page + "---" + categoryId);
+                var _this = this;
+                _this.loading = true;
+                axios({
+                    method: 'get',
+                    url: 'api/queryPicture/',
+                    params: {
+                        categoryId: categoryId,
+                        page: page,
+                        pageSize: 20
+                    }
+                }).then(function (res) {
+
+                    _this.pictures.push.apply(_this.pictures, res.data.data);
+
+                    _this.loading = false;
+                    console.log(res.data.data[0].sprPictureId);
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                        _this.loading = false;
+                    })
+            },
         }
     })
-
+    //自动加载更多
+    window.addEventListener('scroll', function () {
+        var scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+        if (scrollTop + window.innerHeight >= document.body.clientHeight) {
+            app.loadmoreData();
+        }
+    })
 </script>
 
 </body>
