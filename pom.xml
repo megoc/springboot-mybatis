@@ -131,7 +131,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!-- Mybatis generator.自动生成插件-->
+            <!-- Mybatis generator.自动生成插件
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
@@ -145,7 +145,7 @@
                     </execution>
                 </executions>
             </plugin>
-
+            -->
         </plugins>
     </build>
 
