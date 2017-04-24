@@ -1,36 +1,22 @@
 package com.flymegoc.jobs;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flymegoc.model.SprCategories;
 import com.flymegoc.model.SprCategoriesExample;
-import com.flymegoc.model.huaban.HuaBanRoot;
-import com.flymegoc.model.huaban.PinsBean;
-import com.flymegoc.model.huaban.board.BoardRoot;
-import com.flymegoc.model.huaban.pins.PinsRoot;
 import com.flymegoc.service.CategoryService;
 import com.flymegoc.service.HuaBanService;
 import com.flymegoc.utils.HuaBanUtils;
-import com.google.gson.Gson;
-import okhttp3.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 定时任务
