@@ -20,7 +20,7 @@ public class PictureController {
     @Autowired
     private PictureService pictureService;
 
-    @RequestMapping(value = "api/queryPicture/categoryId/{categoryId}/page/{page}", method = RequestMethod.GET)
+    @RequestMapping(value = "api/queryPicture/categoryId/{categoryId}/page/{page}/pageSize/{pageSize}", method = RequestMethod.GET)
     public BaseResult<List<SprPicture>> queryPictureByPathVariable(@PathVariable("categoryId") int categoryId, @PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
         return queryPicture(categoryId, page, pageSize);
     }
