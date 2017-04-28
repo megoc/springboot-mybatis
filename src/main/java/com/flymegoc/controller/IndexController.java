@@ -1,11 +1,7 @@
 package com.flymegoc.controller;
 
-import com.flymegoc.model.SprCategories;
-import com.flymegoc.model.SprPicture;
-import com.flymegoc.model.SprPictureExample;
-import com.flymegoc.service.CategoryService;
-import com.flymegoc.service.PictureService;
-import com.github.pagehelper.PageHelper;
+import com.flymegoc.service.ICategoriesService;
+import com.flymegoc.service.IPictureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,10 +19,10 @@ import java.util.List;
 public class IndexController {
 
     @Autowired
-    private PictureService pictureService;
+    private IPictureService pictureService;
 
     @Autowired
-    private CategoryService categoryService;
+    private ICategoriesService categoryService;
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public String indexPage(Model model){

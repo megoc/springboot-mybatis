@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flymegoc.mapper.UserMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.flymegoc.model.User">
+		<id column="spr_user_id" property="sprUserId" />
+		<result column="spr_user_name" property="sprUserName" />
+		<result column="spr_user_password" property="sprUserPassword" />
+		<result column="spr_user_email" property="sprUserEmail" />
+		<result column="spr_user_pic" property="sprUserPic" />
+		<result column="spr_user_phone" property="sprUserPhone" />
+		<result column="spr_user_age" property="sprUserAge" />
+		<result column="spr_create_time" property="sprCreateTime" />
+		<result column="spr_update_time" property="sprUpdateTime" />
+	</resultMap>
+
+</mapper>

@@ -4,6 +4,11 @@ spring:
     username: root
     password: ngl143252
     driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      cachePrepStmts: true
+      prepStmtCacheSize: 250
+      prepStmtCacheSqlLimit: 2048
+
   thymeleaf:
     cache: false
     cache-period: 0
@@ -11,5 +16,5 @@ spring:
   template:
     cache: false
 mybatis:
-  typeAliasesPackage: org.spring.springboot.model
+  typeAliasesPackage: com.flymegoc.model
   mapperLocations: classpath:mapper/*.xml

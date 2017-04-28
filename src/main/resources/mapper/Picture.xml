@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flymegoc.mapper.PictureMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.flymegoc.model.Picture">
+		<id column="spr_picture_id" property="sprPictureId" />
+		<result column="spr_picture_pinid" property="sprPicturePinid" />
+		<result column="spr_picture_boardid" property="sprPictureBoardid" />
+		<result column="spr_picture_bucket" property="sprPictureBucket" />
+		<result column="spr_picture_key" property="sprPictureKey" />
+		<result column="spr_picture_type" property="sprPictureType" />
+		<result column="spr_picture_width" property="sprPictureWidth" />
+		<result column="spr_picture_height" property="sprPictureHeight" />
+		<result column="spr_picture_ratio" property="sprPictureRatio" />
+		<result column="spr_picture_reads" property="sprPictureReads" />
+		<result column="spr_picture_likes" property="sprPictureLikes" />
+		<result column="spr_picture_categoryid" property="sprPictureCategoryid" />
+		<result column="spr_picture_create_time" property="sprPictureCreateTime" />
+		<result column="spr_picture_update_time" property="sprPictureUpdateTime" />
+	</resultMap>
+
+</mapper>

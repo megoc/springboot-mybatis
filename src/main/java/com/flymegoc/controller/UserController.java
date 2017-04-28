@@ -1,8 +1,8 @@
 package com.flymegoc.controller;
 
-import com.flymegoc.model.SprUser;
-import com.flymegoc.model.SprUserExample;
-import com.flymegoc.service.UserService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.flymegoc.model.User;
+import com.flymegoc.service.IUserService;
 import com.flymegoc.utils.BaseResult;
 import com.flymegoc.utils.PasswordHash;
 import org.apache.shiro.SecurityUtils;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class UserController {
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
 
     /**
@@ -49,28 +50,36 @@ public class UserController {
      * 用户注册
      */
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    protected BaseResult<SprUser> register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    protected BaseResult<User> register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email) throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-        BaseResult<SprUser> result = new BaseResult<>();
+        BaseResult<User> result = new BaseResult<>();
 
         if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
             if (!StringUtils.isEmpty(email)) {
-                SprUserExample userExample = new SprUserExample();
-                userExample.or().andSprUserEmailEqualTo(email);
-                List<SprUser> userList = userService.selectByExample(userExample);
-                if (userList != null && userList.size() > 0) {
+
+                EntityWrapper<User> userEntityWrapper = new EntityWrapper<>();
+                User curuser = new User();
+                curuser.setSprUserEmail(email);
+                userEntityWrapper.setEntity(curuser);
+
+                User selUser = userService.selectOne(userEntityWrapper);
+
+                if (selUser != null) {
                     if (email.contains("@")) {
                         result.code = 1;
                         result.message = "邮箱已被注册";
                     }
                 } else {
                     String passWordHash = PasswordHash.createHash(password);
-                    SprUser user = new SprUser();
+                    User user = new User();
                     user.setSprUserName(username);
                     user.setSprUserPassword(passWordHash);
                     user.setSprUserEmail(email);
-                    int i = userService.insert(user);
-                    if (i >= 1) {
+                    Date date=new Date();
+                    user.setSprCreateTime(date);
+                    user.setSprUpdateTime(date);
+                    boolean success = userService.insert(user);
+                    if (success) {
                         user.setSprUserPassword("");
                         result.code = 200;
                         result.message = "注册成功";
@@ -97,7 +106,7 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public BaseResult login(@RequestParam("username") String userName, @RequestParam("password") String passWord) {
         logger.info("开始登录认证");
-        BaseResult<SprUser> result = new BaseResult<>();
+        BaseResult<User> result = new BaseResult<>();
 
         UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
         Subject currentUser = SecurityUtils.getSubject();
@@ -106,12 +115,15 @@ public class UserController {
             if (!currentUser.isAuthenticated()) {
                 token.setRememberMe(true);
                 currentUser.login(token);
-                //List<SprUser> users=userService.findUser(currentUser.getPrincipal().toString());
-                SprUserExample userExample = new SprUserExample();
-                userExample.or().andSprUserNameEqualTo(currentUser.getPrincipal().toString());
-                List<SprUser> users = userService.selectByExample(userExample);
-                if (users.size() != 0) {
-                    result.data = users.get(0);
+
+                EntityWrapper<User> userEntityWrapper = new EntityWrapper<>();
+                User loginUser = new User();
+                loginUser.setSprUserName(currentUser.getPrincipal().toString());
+                userEntityWrapper.setEntity(loginUser);
+                // userEntityWrapper.where(User.SPR_USER_NAME + "=" + currentLoginName);
+                User user = userService.selectOne(userEntityWrapper);
+                if (user != null) {
+                    result.data = user;
                 }
                 result.code = 200;
                 result.message = "登录成功";

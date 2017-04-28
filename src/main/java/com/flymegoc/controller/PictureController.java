@@ -1,10 +1,11 @@
 package com.flymegoc.controller;
 
-import com.flymegoc.model.SprPicture;
-import com.flymegoc.model.SprPictureExample;
-import com.flymegoc.service.PictureService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.flymegoc.model.Picture;
+import com.flymegoc.service.IPictureService;
 import com.flymegoc.utils.BaseResult;
-import com.github.pagehelper.PageHelper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,36 +19,39 @@ import java.util.List;
 public class PictureController {
 
     @Autowired
-    private PictureService pictureService;
+    private IPictureService pictureService;
 
     @RequestMapping(value = "api/queryPicture/categoryId/{categoryId}/page/{page}/pageSize/{pageSize}", method = RequestMethod.GET)
-    public BaseResult<List<SprPicture>> queryPictureByPathVariable(@PathVariable("categoryId") int categoryId, @PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
+    public BaseResult<List<Picture>> queryPictureByPathVariable(@PathVariable("categoryId") int categoryId, @PathVariable("page") int page, @PathVariable("pageSize") int pageSize) {
         return queryPicture(categoryId, page, pageSize);
     }
 
     @RequestMapping(value = "api/queryPicture/", method = RequestMethod.GET)
-    public BaseResult<List<SprPicture>> queryPictureByRequestParam(@RequestParam("categoryId") int categoryId, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+    public BaseResult<List<Picture>> queryPictureByRequestParam(@RequestParam("categoryId") int categoryId, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
 
         return queryPicture(categoryId, page, pageSize);
     }
 
 
-    public BaseResult<List<SprPicture>> queryPicture(int categoryId, int page, int pageSize) {
-        SprPictureExample pictureExample = new SprPictureExample();
-        List<String> imgageTypes = new ArrayList<>();
-        imgageTypes.add("image/jpeg");
-        imgageTypes.add("image/png");
-        pictureExample.or().andSprPictureTypeIn(imgageTypes).andSprPictureCategoryidEqualTo(categoryId).andSprPictureHeightLessThan(8000);
-        pictureExample.setOrderByClause("spr_picture_create_time desc");
-        // pictureExample.or().andSprPictureCategoryidEqualTo(categoryId);
+    public BaseResult<List<Picture>> queryPicture(int categoryId, int page, int pageSize) {
+
         if (pageSize <= 0) {
             pageSize = 10;
         }
-        PageHelper.startPage(page, pageSize);
-        List<SprPicture> sprPictureList = pictureService.selectByExample(pictureExample);
+        Page<Picture> picturePage = new Page<>();
+        picturePage.setCurrent(page);
+        picturePage.setSize(pageSize);
+        picturePage.setOrderByField("spr_picture_create_time");
+        picturePage.setAsc(false);
 
-        BaseResult<List<SprPicture>> baseResult = new BaseResult<>();
-        baseResult.data = sprPictureList;
+        EntityWrapper<Picture> pictureEntityWrapper = new EntityWrapper<>();
+        Picture picture = new Picture();
+        pictureEntityWrapper.where("spr_picture_type='image/jpeg'").or("spr_picture_type='image/png'").andNew("spr_picture_categoryid=" + categoryId);
+
+        Page<Picture> pageResult = pictureService.selectPage(picturePage, pictureEntityWrapper);
+
+        BaseResult<List<Picture>> baseResult = new BaseResult<>();
+        baseResult.data = pageResult.getRecords();
         baseResult.code = 0;
         baseResult.message = "success";
 

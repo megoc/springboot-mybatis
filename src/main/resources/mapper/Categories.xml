@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flymegoc.mapper.CategoriesMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.flymegoc.model.Categories">
+		<id column="spr_category_id" property="sprCategoryId" />
+		<result column="spr_category_name" property="sprCategoryName" />
+		<result column="spr_category_url" property="sprCategoryUrl" />
+		<result column="spr_categoty_create_time" property="sprCategotyCreateTime" />
+		<result column="spr_category_update_time" property="sprCategoryUpdateTime" />
+		<result column="spr_category_status" property="sprCategoryStatus" />
+	</resultMap>
+
+</mapper>

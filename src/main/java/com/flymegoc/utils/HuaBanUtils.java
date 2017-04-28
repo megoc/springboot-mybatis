@@ -2,25 +2,22 @@ package com.flymegoc.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flymegoc.model.SprPicture;
-import com.flymegoc.model.huaban.FileBean;
-import com.flymegoc.model.huaban.HuaBanRoot;
-import com.flymegoc.model.huaban.PinsBean;
-import com.flymegoc.model.huaban.board.BoardRoot;
-import com.flymegoc.model.huaban.pins.PinsRoot;
+
+import com.flymegoc.model.Picture;
+import com.flymegoc.ohermodel.FileBean;
+import com.flymegoc.ohermodel.HuaBanRoot;
+import com.flymegoc.ohermodel.PinsBean;
+import com.flymegoc.ohermodel.board.BoardRoot;
+import com.flymegoc.ohermodel.pins.PinsRoot;
+
 import com.flymegoc.service.HuaBanService;
-import com.flymegoc.service.PictureService;
-import com.netease.cloud.auth.BasicCredentials;
-import com.netease.cloud.auth.Credentials;
-import com.netease.cloud.services.nos.NosClient;
+import com.flymegoc.service.IPictureService;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.http.Url;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -36,10 +33,10 @@ import java.util.regex.Pattern;
 public class HuaBanUtils {
 
     @Autowired
-    private PictureService pictureService;
+    private IPictureService pictureService;
     DecimalFormat decimalFormat=new DecimalFormat("#.00");
     //主页面抓取
-    public void getHuaBan(HuaBanService huaBanService,String url,int categoryId) {
+    public void getHuaBan(HuaBanService huaBanService, String url, int categoryId) {
         Call<ResponseBody> call = huaBanService.getHuaban(url);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -62,7 +59,7 @@ public class HuaBanUtils {
                         Date date=new Date();
                         for (HuaBanRoot huaBanRoot : huaBanRootList) {
 
-                            SprPicture picture=new SprPicture();
+                            Picture picture=new Picture();
                             picture.setSprPictureBoardid(huaBanRoot.getBoard_id()+"");
                             picture.setSprPicturePinid(huaBanRoot.getPin_id()+"");
 
@@ -129,7 +126,7 @@ public class HuaBanUtils {
                         Date date=new Date();
                         for (PinsBean pinsBean : pinsRoot.getBoard().getPins()) {
 
-                            SprPicture picture=new SprPicture();
+                            Picture picture=new Picture();
                             picture.setSprPictureBoardid(pinsBean.getBoard_id()+"");
                             picture.setSprPicturePinid(pinsBean.getPin_id()+"");
 
@@ -189,7 +186,7 @@ public class HuaBanUtils {
                         Date date=new Date();
                         for (PinsBean pinsBean : boardRoot.getPins()) {
 
-                            SprPicture picture=new SprPicture();
+                            Picture picture=new Picture();
                             picture.setSprPictureBoardid(pinsBean.getBoard_id()+"");
                             picture.setSprPicturePinid(pinsBean.getPin_id()+"");
 
@@ -228,8 +225,8 @@ public class HuaBanUtils {
         });
     }
     //将图片保存到数据库中
-    private void savePicture(SprPicture picture){
-        SprPicture sprPicture=pictureService.selectByPrimaryKey(picture.getSprPictureId());
+    private void savePicture(Picture picture){
+        Picture sprPicture=pictureService.selectById(picture.getSprPictureId());
         if (sprPicture!=null){
             return;
         }

@@ -1,9 +1,9 @@
 package com.flymegoc.jobs;
 
-import com.flymegoc.model.SprCategories;
-import com.flymegoc.model.SprCategoriesExample;
-import com.flymegoc.service.CategoryService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.flymegoc.model.Categories;
 import com.flymegoc.service.HuaBanService;
+import com.flymegoc.service.ICategoriesService;
 import com.flymegoc.utils.HuaBanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,14 +54,14 @@ public class Jobs {
 
     private static Logger logger = LoggerFactory.getLogger(Jobs.class);
 
-    public final static long ONE_Minute = 60 * 1000*30;
+    public final static long ONE_Minute = 60 * 1000*3;
 
     private final static String BASE_URL = "http://huaban.com/";
 
     private HuaBanService huaBanService;
 
     @Autowired
-    private CategoryService categoryService;
+    private ICategoriesService categoryService;
 
     private Random mRandom;
 
@@ -95,12 +95,12 @@ public class Jobs {
         if (randomIndexArray==null){
             randomIndexArray=new ArrayList<>();
         }
-        SprCategoriesExample categoriesExample=new SprCategoriesExample();
-        List<SprCategories> sprCategoriesList=categoryService.selectByExample(categoriesExample);
+        EntityWrapper<Categories> categoriesEntityWrapper=new EntityWrapper<>();
+        List<Categories> sprCategoriesList=categoryService.selectList(categoriesEntityWrapper);
         if (sprCategoriesList==null||sprCategoriesList.size()==0){
 
             for(int i=0;i<names.length;i++){
-                SprCategories sprCategories=new SprCategories();
+                Categories sprCategories=new Categories();
                 sprCategories.setSprCategoryId(i+1);
                 sprCategories.setSprCategoryName(names[i]);
                 sprCategories.setSprCategoryUrl(urls[i]);
@@ -125,7 +125,7 @@ public class Jobs {
             logger.info("重置抓取。。。");
         }
         //开始抓取并保存数据
-        SprCategories sprCategories = sprCategoriesList.get(index);
+        Categories sprCategories = sprCategoriesList.get(index);
         logger.info("---开始抓取" + "---" + sprCategories.getSprCategoryName() + "(" + sprCategories.getSprCategoryId() + "）的数据---");
         huaBanUtils.getHuaBan(huaBanService,sprCategories.getSprCategoryUrl(),sprCategories.getSprCategoryId());
     }

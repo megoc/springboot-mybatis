@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flymegoc.mapper.FavCategoriesMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.flymegoc.model.FavCategories">
+		<id column="spr_fav_categories_id" property="sprFavCategoriesId" />
+		<result column="spr_fav_categories_name" property="sprFavCategoriesName" />
+		<result column="spr_fav_categories_likes" property="sprFavCategoriesLikes" />
+		<result column="spr_fav_categories_private" property="sprFavCategoriesPrivate" />
+		<result column="spr_fav_categories_create_time" property="sprFavCategoriesCreateTime" />
+		<result column="spr_fav_categories_update_time" property="sprFavCategoriesUpdateTime" />
+		<result column="spr_fav_categories_userid" property="sprFavCategoriesUserid" />
+	</resultMap>
+
+</mapper>

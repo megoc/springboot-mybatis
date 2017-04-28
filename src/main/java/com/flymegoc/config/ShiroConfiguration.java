@@ -39,8 +39,6 @@ import java.util.Map;
 @Configuration
 public class ShiroConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(FormAuthenticationFilter.class);
-
     private static Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
 
 

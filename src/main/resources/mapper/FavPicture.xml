@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flymegoc.mapper.FavPictureMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.flymegoc.model.FavPicture">
+		<id column="spr_fav_picture_id" property="sprFavPictureId" />
+		<result column="spr_fav_picture_userid" property="sprFavPictureUserid" />
+		<result column="spr_fav_picture_fav_categoryid" property="sprFavPictureFavCategoryid" />
+		<result column="spr_fav_picture_pictureid" property="sprFavPicturePictureid" />
+		<result column="spr_fav_picture_create_time" property="sprFavPictureCreateTime" />
+		<result column="spr_fav_picture_update_time" property="sprFavPictureUpdateTime" />
+	</resultMap>
+
+</mapper>
