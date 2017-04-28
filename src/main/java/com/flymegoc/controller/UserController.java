@@ -75,7 +75,7 @@ public class UserController {
                     user.setSprUserName(username);
                     user.setSprUserPassword(passWordHash);
                     user.setSprUserEmail(email);
-                    Date date=new Date();
+                    Date date = new Date();
                     user.setSprCreateTime(date);
                     user.setSprUpdateTime(date);
                     boolean success = userService.insert(user);
@@ -112,22 +112,16 @@ public class UserController {
         Subject currentUser = SecurityUtils.getSubject();
 
         try {
-            if (!currentUser.isAuthenticated()) {
-                token.setRememberMe(true);
-                currentUser.login(token);
+            token.setRememberMe(true);
+            currentUser.login(token);
 
-                EntityWrapper<User> userEntityWrapper = new EntityWrapper<>();
-                User loginUser = new User();
-                loginUser.setSprUserName(currentUser.getPrincipal().toString());
-                userEntityWrapper.setEntity(loginUser);
-                // userEntityWrapper.where(User.SPR_USER_NAME + "=" + currentLoginName);
-                User user = userService.selectOne(userEntityWrapper);
-                if (user != null) {
-                    result.data = user;
-                }
-                result.code = 200;
-                result.message = "登录成功";
+            User user = userService.selectByLoginName(currentUser.getPrincipal().toString());
+            if (user != null) {
+                user.setSprUserPassword("");
+                result.data = user;
             }
+            result.code = 200;
+            result.message = "登录成功";
         } catch (Exception e) {
             //e.printStackTrace();
             result.code = 1;

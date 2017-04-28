@@ -16,14 +16,16 @@
             transition: all .5s cubic-bezier(.55, 0, .1, 1);
             -webkit-transition: all .5s cubic-bezier(.55, 0, .1, 1);
         }
-        .layout{
+
+        .layout {
             border: 1px solid #d7dde4;
             background: #f5f7f9;
             position: relative;
             border-radius: 4px;
             overflow: hidden;
         }
-        .layout-logo{
+
+        .layout-logo {
             width: 100px;
             height: 30px;
             background: #5b6270;
@@ -33,28 +35,34 @@
             top: 15px;
             left: 20px;
         }
-        .layout-header{
+
+        .layout-header {
             height: 60px;
             background: #fff;
-            box-shadow: 0 1px 1px rgba(0,0,0,.1);
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
         }
-        .layout-copy{
+
+        .layout-copy {
             text-align: center;
             padding: 10px 0 20px;
             color: #9ea7b4;
         }
-        .layout-ceiling{
+
+        .layout-ceiling {
             background: #464c5b;
             padding: 10px 0;
             overflow: hidden;
         }
-        .layout-ceiling-main{
+
+        .layout-ceiling-main {
             float: right;
             margin-right: 15px;
         }
-        .layout-ceiling-main a{
+
+        .layout-ceiling-main a {
             color: #9ba7b5;
         }
+
         .item {
             -moz-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
             -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .1);
@@ -111,18 +119,18 @@
             <div class="layout-ceiling-main">
                 <a href="#">主页</a> |
                 <a href="#">类别</a> |
-                <a href="#">登陆注册</a> |
+                <a href="login.html">登陆/注册</a> |
                 <a href="#">关于</a>
             </div>
         </div>
         <div class="layout-header">
             <div class="layout-logo"></div>
         </div>
-        <div>
+        <div v-loading.body="loading" element-loading-text="拼命加载中" style="min-height: 550px">
             <waterfall
                     :align="align"
                     :line-gap="250"
-                    :min-line-gap="150"
+                    :min-line-gap="200"
                     :max-line-gap="270"
                     :single-max-width="300"
                     :watch="pictures"
@@ -148,8 +156,11 @@
                 </waterfall-slot>
             </waterfall>
         </div>
+        <div v-if="buttonLoading" v-loading.body="loading" element-loading-text="拼命加载中" style="min-height: 100px">
+
+        </div>
         <div class="layout-copy">
-            2011-2016 &copy; TalkingData
+            2017-2018 &copy; Flymegoc
         </div>
     </div>
 </div>
@@ -164,8 +175,7 @@
         el: "#app",
         mounted: function () {
             this.$nextTick(function () {
-                console.log("什么鬼" + document.referrer);
-                this.loadData(this.currentCategoryId, this.currentPage);
+                 this.loadData(this.currentCategoryId, this.currentPage);
             })
         },
         components: {
@@ -177,7 +187,8 @@
             currentCategoryId: 10,
             pictures: [],
             align: 'center',
-            loading: false,
+            loading: true,
+            buttonLoading: false,
             sildPictures: []
         },
         methods: {
@@ -185,6 +196,9 @@
             loadData: function (categoryId, page) {
                 var _this = this;
                 _this.loading = true;
+                if (_this.currentPage>1){
+                    _this.buttonLoading=true;
+                }
                 axios({
                     method: 'get',
                     url: 'api/queryPicture/',
@@ -197,10 +211,12 @@
 
                     _this.pictures.push.apply(_this.pictures, res.data.data);
                     _this.loading = false;
+                    _this.buttonLoading=true;
                     console.log(res.data.data[0].sprPictureId);
                 })
                     .catch(function (error) {
                         console.log(error);
+                        _this.buttonLoading=true;
                         _this.loading = false;
                     })
             },
