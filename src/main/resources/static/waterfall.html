@@ -175,7 +175,7 @@
                 </waterfall-slot>
             </waterfall>
         </div>
-        <div v-if="buttonLoading" v-loading.body="loading" element-loading-text="拼命加载中" style="min-height: 100px">
+        <div v-if="buttonLoading" v-loading.body="buttonLoading" element-loading-text="拼命加载中" style="min-height: 100px">
 
         </div>
         <div class="layout-copy">
@@ -233,12 +233,12 @@
 
                     _this.pictures.push.apply(_this.pictures, res.data.data);
                     _this.loading = false;
-                    _this.buttonLoading = true;
+                    _this.buttonLoading = false;
                     console.log(res.data.data[0].sprPictureId);
                 })
                     .catch(function (error) {
                         console.log(error);
-                        _this.buttonLoading = true;
+                        _this.buttonLoading = false;
                         _this.loading = false;
                     })
             },
